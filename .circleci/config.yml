@@ -11,7 +11,7 @@ jobs:
       - run:
           name: docker build
           command: |
-            export TAG=$([ "${$CIRCLE_BRANCH}" == "master" ] && echo "latest" || echo "${$CIRCLE_BRANCH}")
+            export TAG=$([ "${CIRCLE_BRANCH}" == "master" ] && echo "latest" || echo "${CIRCLE_BRANCH}")
             docker build -t os161:${TAG} .
             docker push os161:${TAG}
 
