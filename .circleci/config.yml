@@ -7,7 +7,7 @@ jobs:
       IMAGE_NAME: ronenniv/os161
     executor: 
       name: docker/docker
-      resource_class: xlarge
+      size: "xlarge"
     steps:
       - setup_remote_docker
       - checkout
