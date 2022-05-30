@@ -11,7 +11,7 @@ jobs:
       - run:
           echo 'export TAG=$([ "${$CIRCLE_BRANCH}" == "master" ] && echo "latest" || echo "${$CIRCLE_BRANCH}")' >> $BASH_ENV
       - docker/build:
-          image: os161/latest
+          image: os161
           tag: $TAG
       - docker/push:
           image: os161
