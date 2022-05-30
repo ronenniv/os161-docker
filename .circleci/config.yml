@@ -3,9 +3,7 @@ orbs:
   docker: circleci/docker@2.1.1
 jobs:
   build-and-push:
-    executor: 
-      name: docker/docker
-    resource_class: xlarge
+    executor: docker/docker
     environment:
       IMAGE_NAME: ronenniv/os161
     steps:
