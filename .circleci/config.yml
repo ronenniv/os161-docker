@@ -5,8 +5,9 @@ jobs:
   build-and-push:
     environment:
       IMAGE_NAME: ronenniv/os161
-    executor: docker/docker
-    size: xlarge
+    executor: 
+      name: docker/docker
+      size: xlarge
     steps:
       - setup_remote_docker
       - checkout
