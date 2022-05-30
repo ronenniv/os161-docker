@@ -7,7 +7,7 @@
 Docker Hub images are built from the code in this repository. Alternatively [build an image from source](#Build).
 
 ```shell
-docker pull johnramsden/os161
+docker pull ronenniv/os161
 ```
 
 ## Build
@@ -26,7 +26,7 @@ Run container, mounting a directory into the container:
 
 ```shell
 docker run --interactive --tty \
-    --volume="${HOME}/os161:/home/os161/os161" johnramsden/os161
+    --volume="${HOME}/os161:/home/os161/os161" ronenniv/os161
 ```
 
 Now after compiling a kernel, it can be started.

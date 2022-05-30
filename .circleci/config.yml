@@ -1,0 +1,25 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@2.1.1
+jobs:
+  build-and-push:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - run:
+          echo 'export TAG=$([ "${$CIRCLE_BRANCH}" == "main" ] && echo "latest" || echo "${$CIRCLE_BRANCH}")' >> $BASH_ENV"
+      - docker/build:
+          image: os161/latest
+          tag: $TAG
+      - docker/push:
+          image: os161
+          tag: $TAG
+workflows:
+  commit:
+    jobs:
+      - build-and-push:
+          filters:
+            branches:
+              only: main

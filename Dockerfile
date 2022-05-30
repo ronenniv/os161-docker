@@ -1,10 +1,11 @@
+ 
 FROM ubuntu:18.04 as base
 
 ARG SYS161="sys161-2.0.3"
 ARG BINUTILS161="binutils-2.24+os161-2.1"
 ARG GCC161="gcc-4.8.3+os161-2.1"
 ARG GDB161="gdb-7.8+os161-2.1"
-ARG MIRROR="http://www.ece.ubc.ca/~os161/download"
+ARG MIRROR="http://www.os161.org/download"
 ARG SOURCE_PREFIX="/usr/local/src"
 ARG TMP_DIR="/tmp/os161"
 ARG INSTALL_PREFIX="/usr/local/os161"
@@ -18,11 +19,9 @@ ENV SOURCE_PREFIX=$SOURCE_PREFIX
 ENV TMP_DIR=$TMP_DIR
 ENV INSTALL_PREFIX=$INSTALL_PREFIX
 
-LABEL maintainer="John Ramsden"
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" >> /etc/apt/sources.list
+RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" >> /etc/apt/sources.list
 RUN apt-get --yes update && \
     apt-get install --yes --no-install-recommends \
         bmake ncurses-dev libmpc-dev wget curl build-essential tmux ca-certificates && \
@@ -47,6 +46,12 @@ RUN /tmp/os161/build.sh -d \
 
 FROM base AS runner
 
+RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" >> /etc/apt/sources.list
+RUN apt-get --yes update && \
+    apt-get install --yes --no-install-recommends \
+        git vim sudo && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder "${INSTALL_PREFIX}" "${INSTALL_PREFIX}"
 
 RUN cd "${INSTALL_PREFIX}/os161/bin" && \
@@ -55,6 +60,8 @@ RUN cd "${INSTALL_PREFIX}/os161/bin" && \
     for file in *; do ln -s --relative "${file}" "/usr/local/bin/${file}"; done && \
     useradd --create-home --shell=/bin/bash --user-group os161 && \
     echo 'set auto-load safe-path /' > /home/os161/.gdbinit
+
+RUN echo "os161 ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER os161
 WORKDIR /home/os161
