@@ -3,6 +3,8 @@ orbs:
   docker: circleci/docker@2.1.1
 jobs:
   build-and-push:
+    environment:
+      IMAGE_NAME: ronenniv/os161
     executor: docker/docker
     steps:
       - setup_remote_docker
@@ -12,8 +14,8 @@ jobs:
           name: docker build
           command: |
             export TAG=$([ "${CIRCLE_BRANCH}" == "master" ] && echo "latest" || echo "${CIRCLE_BRANCH}")
-            docker build -t os161:${TAG} .
-            docker push os161:${TAG}
+            docker build -t ${IMAGE_NAME}:${TAG} .
+            docker push ${IMAGE_NAME}:${TAG}
 
 workflows:
   commit:
