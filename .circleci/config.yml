@@ -3,11 +3,11 @@ orbs:
   docker: circleci/docker@2.1.1
 jobs:
   build-and-push:
-    environment:
-      IMAGE_NAME: ronenniv/os161
     executor: 
       name: docker/docker
-      size: "xlarge"
+    resource_class: xlarge
+    environment:
+      IMAGE_NAME: ronenniv/os161
     steps:
       - setup_remote_docker
       - checkout
