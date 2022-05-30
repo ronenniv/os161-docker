@@ -9,16 +9,13 @@ jobs:
       - checkout
       - docker/check
       - run:
-          command:
-            echo 'export TAG=$([ "${$CIRCLE_BRANCH}" == "master" ] && echo "latest" || echo "${$CIRCLE_BRANCH}")' >> $BASH_ENV
-            source $BASH_ENV
-          
-      - docker/build:
-          image: os161
-          tag: $TAG
-      - docker/push:
-          image: os161
-          tag: $TAG
+          name: docker build
+          command: |
+            export TAG=$([ "${$CIRCLE_BRANCH}" == "master" ] && echo "latest" || echo "${$CIRCLE_BRANCH}")
+            docker build -t os161:$TAG .
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_LOGIN --password-stdin
+            sdocker push os161:$TAG
+
 workflows:
   commit:
     jobs:
